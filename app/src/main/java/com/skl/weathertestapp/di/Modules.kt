@@ -4,6 +4,7 @@ import com.skl.weathertestapp.data.datasources.network.mapping.ConditionMapper
 import com.skl.weathertestapp.data.datasources.network.mapping.CurrentMapper
 import com.skl.weathertestapp.data.datasources.network.mapping.ForecastMapper
 import com.skl.weathertestapp.data.datasources.network.mapping.WeeklyForecastMapper
+import com.skl.weathertestapp.data.datasources.network.service.ForecastService
 import com.skl.weathertestapp.data.datasources.network.service.ForecastServiceImpl
 import com.skl.weathertestapp.data.repository.ForecastRepository
 import com.skl.weathertestapp.data.repository.ForecastRepositoryImpl
@@ -19,7 +20,7 @@ import org.koin.dsl.module
 val apiModule = module {
 
     //ktor client
-    single {
+    single<ForecastService> {
         ForecastServiceImpl(
             HttpClient(Android) {
             install(Logging) {
