@@ -1,8 +1,9 @@
 package com.skl.weathertestapp.data.repository
 
 import com.skl.weathertestapp.domain.Forecast
+import com.skl.weathertestapp.utils.Resource
 
 interface ForecastRepository {
 
-    suspend fun getForecast(): Forecast?
+    suspend fun getForecast(): Resource<Forecast>
 }

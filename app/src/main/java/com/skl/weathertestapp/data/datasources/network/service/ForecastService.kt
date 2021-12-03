@@ -1,8 +1,9 @@
 package com.skl.weathertestapp.data.datasources.network.service
 
 import com.skl.weathertestapp.domain.Forecast
+import com.skl.weathertestapp.utils.Resource
 
 interface ForecastService {
 
-    suspend fun getForecastForTheWeek(): Forecast?
+    suspend fun getForecastForTheWeek(): Resource<Forecast>
 }

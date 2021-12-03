@@ -3,7 +3,9 @@ package com.skl.weathertestapp.data.datasources.network.service
 import com.skl.weathertestapp.data.datasources.network.ApiConstants
 import com.skl.weathertestapp.data.datasources.network.mapping.ForecastMapper
 import com.skl.weathertestapp.domain.Forecast
+import com.skl.weathertestapp.utils.Resource
 import io.ktor.client.*
+import io.ktor.client.features.*
 import io.ktor.client.request.*
 
 class ForecastServiceImpl(
@@ -11,7 +13,7 @@ class ForecastServiceImpl(
     private val mapper: ForecastMapper
     ): ForecastService {
 
-    override suspend fun getForecastForTheWeek(): Forecast {
+    override suspend fun getForecastForTheWeek(): Resource<Forecast> {
         return try {
             val forecast = mapper.toDomain(
                     client.get{
@@ -20,17 +22,18 @@ class ForecastServiceImpl(
                     parameter("q", "Cape Town")
                 }
             )
-            forecast
-        } catch (e: Exception){
-            throw Exception("Exception has been thrown: ${e.message}")
+            Resource.Success(forecast)
         }
-        /*catch (e: ClientRequestException){
+        catch (e: ClientRequestException){
             val msg = e.response.status.description
-            null
+            Resource.Error(msg)
 
         } catch (e: ServerResponseException){
             val msg = e.response.status.description
-            null
-        }*/
+            Resource.Error(msg)
+        }
+        catch (e: Exception){
+            throw Exception("Exception has been thrown: ${e.message}")
+        }
     }
 }

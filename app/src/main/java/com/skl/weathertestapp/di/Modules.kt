@@ -8,6 +8,7 @@ import com.skl.weathertestapp.data.datasources.network.service.ForecastService
 import com.skl.weathertestapp.data.datasources.network.service.ForecastServiceImpl
 import com.skl.weathertestapp.data.repository.ForecastRepository
 import com.skl.weathertestapp.data.repository.ForecastRepositoryImpl
+import com.skl.weathertestapp.presentation.screen.homescreen.HomeScreenPresenter
 import com.skl.weathertestapp.presentation.screen.homescreen.HomeScreenVM
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
@@ -52,7 +53,8 @@ val repositoryModule = module {
 }
 
 val HomeScreenVMModule = module {
-    viewModel { HomeScreenVM(get()) }
+    viewModel { HomeScreenVM() }
+    viewModel { (viewModel: HomeScreenVM) -> HomeScreenPresenter(get(), viewModel)}
 }
 
 val allModules: List<Module> = listOf(
