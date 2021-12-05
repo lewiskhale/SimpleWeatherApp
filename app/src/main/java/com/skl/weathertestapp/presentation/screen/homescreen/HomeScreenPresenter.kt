@@ -6,7 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.skl.weathertestapp.data.repository.ForecastRepository
 import kotlinx.coroutines.launch
 
-class HomeScreenPresenter(private val repo: ForecastRepository, private val vm: HomeScreenVM): ViewModel() {
+class HomeScreenPresenter
+    (private val repo: ForecastRepository,
+     private val vm: HomeScreenVM)
+    : ViewModel() {
 
     fun getWeather(){
         viewModelScope.launch {
@@ -21,4 +24,9 @@ class HomeScreenPresenter(private val repo: ForecastRepository, private val vm: 
         }
     }
 
+    fun onPermissionResult(wasGranted: Boolean){
+        vm._permissionGranted.value = wasGranted
+    }
+
+    fun getPermission(): Boolean = vm.permissionGranted.value
 }

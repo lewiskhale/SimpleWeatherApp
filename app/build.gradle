@@ -80,4 +80,6 @@ dependencies {
 /**        //dependency for multiplatform serialization
     implementation("io.ktor:ktor-client-serialization:$ktor_version")*/
 
+    implementation("com.google.android.gms:play-services-location:18.0.0")
+
 }

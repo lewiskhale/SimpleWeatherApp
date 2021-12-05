@@ -7,6 +7,7 @@ import com.skl.weathertestapp.utils.Resource
 import io.ktor.client.*
 import io.ktor.client.features.*
 import io.ktor.client.request.*
+import io.ktor.http.*
 
 class ForecastServiceImpl(
     private val client: HttpClient,
@@ -18,6 +19,7 @@ class ForecastServiceImpl(
             val forecast = mapper.toDomain(
                     client.get{
                     url(ApiConstants.FORECAST_ENDPOINT)
+                    contentType(ContentType.Application.Json)
                     parameter("key",ApiConstants.API_KEY)
                     parameter("q", "Cape Town")
                 }

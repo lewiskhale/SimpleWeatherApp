@@ -17,7 +17,8 @@ abstract class BaseFragment<VB: ViewBinding>: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return getViewBinding().root
+        _binding = getViewBinding()
+        return binding.root
     }
 
     override fun onDestroyView() {

@@ -6,8 +6,8 @@ object ApiConstants {
 
     private const val BASE_URL = "https://api.weatherapi.com/v1"
 
-    const val CURRENT_WEATHER_ENDPOINT = "$BASE_URL+/current.json"
+    const val CURRENT_WEATHER_ENDPOINT = "$BASE_URL/current.json"
 
-    const val FORECAST_ENDPOINT = "$BASE_URL+/forecast.json"
+    const val FORECAST_ENDPOINT = "$BASE_URL/forecast.json"
 
 }
