@@ -5,8 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".presentation.screen.homescreen.HomeScreenFragment">
 
-    <Button
+    <TextView
+        android:id="@+id/current_temp_text"
+        android:text="The current temp will go here"
         android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="16dp"
         android:id="@+id/button"
         android:text="Get Location"
         android:layout_width="wrap_content"

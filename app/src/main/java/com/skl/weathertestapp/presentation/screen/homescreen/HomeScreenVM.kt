@@ -9,7 +9,7 @@ import com.skl.weathertestapp.domain.Forecast
 
 class HomeScreenVM: ViewModel() {
 
-    val forecast: LiveData<Forecast> = MutableLiveData()
+    val forecast: MutableLiveData<Forecast> = MutableLiveData()
 
     val isLoading: StateFlow<Boolean> = MutableStateFlow(false)
 

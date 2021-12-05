@@ -16,6 +16,7 @@ class HomeScreenPresenter
             val forecastResult = repo.getForecast(lat, long)
             val forecast = forecastResult.data
             if (forecast != null) {
+                vm.forecast.value = forecast
                 Log.d("TAG", "getWeather: The current temp is: ${forecast.current.current_temp}")
             }
             else{

@@ -33,11 +33,6 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
     private val locationCallback = object: LocationCallback(){
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
-            result.locations.forEach { location ->
-                if(location != null){
-                    stopLocationUpdates()
-                }
-            }
         }
     }
 
@@ -52,9 +47,9 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
     }
 
     private fun subscribeObservers(){
-        viewmodel.forecast.observe(viewLifecycleOwner, {
-            //todo stuff happens here
-        })
+        viewmodel.forecast.observe(viewLifecycleOwner) { forecast->
+            binding.currentTempText.text = forecast.current.current_temp.toString()
+        }
 
         viewmodel.permissionGranted.observe(viewLifecycleOwner){
             requestingLocation = it
@@ -65,13 +60,8 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
     private fun getLocation(){
         if(requestingLocation){
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location->
-                if(location == null){
-                    Log.d("TAG", "getLocation: the location is null")
-                    startLocationUpdates()
-                }
-                else{
-                    presenter.getWeather(location.latitude, location.longitude)
-                }
+                startLocationUpdates()
+                presenter.getWeather(location.latitude, location.longitude)
             }
         }
         else{
@@ -85,8 +75,8 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
         Log.d("TAG", "startLocationUpdates: has started")
         val locationRequest = LocationRequest.create().apply {
             setPriority(PRIORITY_HIGH_ACCURACY)
-            setInterval(20 * 1000)
-            setFastestInterval(2000)
+            setInterval(2000)
+            setFastestInterval(1000)
         }
 
         fusedLocationProviderClient.requestLocationUpdates(
