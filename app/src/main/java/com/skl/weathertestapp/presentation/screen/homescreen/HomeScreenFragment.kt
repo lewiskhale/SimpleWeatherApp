@@ -21,7 +21,6 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
 
     override fun getViewBinding(): FragmentHomeScreenBinding = FragmentHomeScreenBinding.inflate(layoutInflater)
 
-    //private val cts = CancellationTokenSource()
     private var requestingLocation: Boolean = false
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -112,10 +111,3 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
         stopLocationUpdates()
     }
 }
-
-/*
-* Log.d("TAG", "getLocation: Permissions is: ${hasPermissions()}")
-        val fine_loc = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        val coarse_loc = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        Log.d("TAG", "getLocation: Access fine location: $fine_loc and Coarse Loc: $coarse_loc")
-*/
