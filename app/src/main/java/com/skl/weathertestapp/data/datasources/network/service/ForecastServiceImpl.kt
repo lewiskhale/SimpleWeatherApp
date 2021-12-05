@@ -14,14 +14,14 @@ class ForecastServiceImpl(
     private val mapper: ForecastMapper
     ): ForecastService {
 
-    override suspend fun getForecastForTheWeek(): Resource<Forecast> {
+    override suspend fun getForecastForTheWeek(lat: Double, long: Double): Resource<Forecast> {
         return try {
             val forecast = mapper.toDomain(
                     client.get{
                     url(ApiConstants.FORECAST_ENDPOINT)
                     contentType(ContentType.Application.Json)
                     parameter("key",ApiConstants.API_KEY)
-                    parameter("q", "Cape Town")
+                    parameter("q", "$lat,$long")
                 }
             )
             Resource.Success(forecast)

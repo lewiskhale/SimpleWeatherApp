@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationRequest.PRIORITY_NO_POWER
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.skl.weathertestapp.databinding.FragmentHomeScreenBinding
@@ -20,69 +21,57 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
 
     override fun getViewBinding(): FragmentHomeScreenBinding = FragmentHomeScreenBinding.inflate(layoutInflater)
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    //private val cts = CancellationTokenSource()
+    private var requestingLocation: Boolean = false
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val viewmodel:HomeScreenVM by sharedViewModel()
+
     private val presenter: HomeScreenPresenter by sharedViewModel{
         parametersOf(viewmodel)
     }
-    private val cts = CancellationTokenSource()
 
     private val locationCallback = object: LocationCallback(){
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
             result.locations.forEach { location ->
                 if(location != null){
-                    Log.d("TAG", "onResultCallback: the latitude: ${location.latitude}latitude and longitude: ${location.longitude}")
                     stopLocationUpdates()
                 }
             }
-
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        requestingLocation = presenter.getPermission()
         binding.button.setOnClickListener {
             getLocation()
         }
-        //presenter.getWeather()
-        subscribeObserver()
+        subscribeObservers()
     }
 
-    private fun subscribeObserver(){
+    private fun subscribeObservers(){
         viewmodel.forecast.observe(viewLifecycleOwner, {
             //todo stuff happens here
         })
+
+        viewmodel.permissionGranted.observe(viewLifecycleOwner){
+            requestingLocation = it
+        }
     }
 
     @SuppressLint("MissingPermission")
     private fun getLocation(){
-        Log.d("TAG", "getLocation: Permissions is: ${hasPermissions()}")
-        val fine_loc = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        val coarse_loc = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        Log.d("TAG", "getLocation: Access fine location: $fine_loc and Coarse Loc: $coarse_loc")
-
-        if(hasPermissions()){
+        if(requestingLocation){
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location->
                 if(location == null){
-                    val locationRequest = LocationRequest.create().apply {
-                        setPriority(PRIORITY_NO_POWER)
-                        setInterval(20 * 1000)
-                    }
-                    startLocationUpdates(locationRequest)
+                    Log.d("TAG", "getLocation: the location is null")
+                    startLocationUpdates()
                 }
                 else{
-                    val latitude = location?.let {it->
-                        it.latitude
-                    } ?: "location is null"
-
-                    val longitude = location?.let {it->
-                        it.longitude
-                    } ?: "location is null"
-
-                    Log.d("TAG", "onViewCreated: the latitude: $latitude and longitude: $longitude")
+                    presenter.getWeather(location.latitude, location.longitude)
                 }
             }
         }
@@ -92,17 +81,41 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun startLocationUpdates(locationRequest: LocationRequest) {
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+    private fun startLocationUpdates() {
+
+        Log.d("TAG", "startLocationUpdates: has started")
+        val locationRequest = LocationRequest.create().apply {
+            setPriority(PRIORITY_HIGH_ACCURACY)
+            setInterval(20 * 1000)
+            setFastestInterval(2000)
+        }
+
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
             locationCallback,
             Looper.getMainLooper())
     }
 
     private fun stopLocationUpdates() {
+        Log.d("TAG", "stopLocationUpdates: has started")
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
-    private fun hasPermissions(): Boolean =
-        presenter.getPermission()
+    override fun onResume() {
+        super.onResume()
+        if(requestingLocation)
+            startLocationUpdates()
+    }
 
+    override fun onPause() {
+        super.onPause()
+        stopLocationUpdates()
+    }
 }
+
+/*
+* Log.d("TAG", "getLocation: Permissions is: ${hasPermissions()}")
+        val fine_loc = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val coarse_loc = ActivityCompat.checkSelfPermission(requireContext(),android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        Log.d("TAG", "getLocation: Access fine location: $fine_loc and Coarse Loc: $coarse_loc")
+*/

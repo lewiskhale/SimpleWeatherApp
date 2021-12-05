@@ -5,5 +5,5 @@ import com.skl.weathertestapp.utils.Resource
 
 interface ForecastService {
 
-    suspend fun getForecastForTheWeek(): Resource<Forecast>
+    suspend fun getForecastForTheWeek(lat: Double, long: Double): Resource<Forecast>
 }

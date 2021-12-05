@@ -6,7 +6,7 @@ import com.skl.weathertestapp.utils.Resource
 
 class ForecastRepositoryImpl(private val api: ForecastService): ForecastRepository {
 
-    override suspend fun getForecast(): Resource<Forecast> {
-        return api.getForecastForTheWeek()
+    override suspend fun getForecast(lat: Double, long: Double): Resource<Forecast> {
+        return api.getForecastForTheWeek(lat, long)
     }
 }

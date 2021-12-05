@@ -11,9 +11,9 @@ class HomeScreenPresenter
      private val vm: HomeScreenVM)
     : ViewModel() {
 
-    fun getWeather(){
+    fun getWeather(lat: Double, long: Double){
         viewModelScope.launch {
-            val forecastResult = repo.getForecast()
+            val forecastResult = repo.getForecast(lat, long)
             val forecast = forecastResult.data
             if (forecast != null) {
                 Log.d("TAG", "getWeather: The current temp is: ${forecast.current.current_temp}")
@@ -28,5 +28,5 @@ class HomeScreenPresenter
         vm._permissionGranted.value = wasGranted
     }
 
-    fun getPermission(): Boolean = vm.permissionGranted.value
+    fun getPermission(): Boolean = vm.permissionGranted.value!!
 }

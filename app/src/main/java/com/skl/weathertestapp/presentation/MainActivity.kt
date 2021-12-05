@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun observePermissions(){
         lifecycleScope.launchWhenStarted {
-            viewModel.permissionGranted.collectLatest { permissionState->
+            viewModel.permissionGranted.observe(this@MainActivity) { permissionState->
                 if (permissionState) {
                     showPermissionsGrantedToast(true)
                 } else {

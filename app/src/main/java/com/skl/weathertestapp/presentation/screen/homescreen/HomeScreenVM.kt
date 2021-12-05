@@ -13,7 +13,7 @@ class HomeScreenVM: ViewModel() {
 
     val isLoading: StateFlow<Boolean> = MutableStateFlow(false)
 
-    var _permissionGranted: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    var _permissionGranted: MutableLiveData<Boolean> = MutableLiveData(false)
 
-    val permissionGranted: StateFlow<Boolean> get() = _permissionGranted!!
+    val permissionGranted: LiveData<Boolean> get() = _permissionGranted!!
 }
