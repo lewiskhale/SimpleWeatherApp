@@ -1,23 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.screen.homescreen.HomeScreenFragment">
 
+    <ImageView
+        android:id="@+id/weather_image_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/forest_sunny"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
     <TextView
-        android:id="@+id/current_temp_text"
-        android:text="The current temp will go here"
+        android:id="@+id/name_of_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/city_name"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/weather_image_bg"
+        tools:text="Name of the City" />
+
+    <TextView
+        android:id="@+id/current_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="8dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/current_weather_temp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/name_of_city"
+        app:layout_constraintStart_toStartOf="@+id/name_of_city"
+        app:layout_constraintTop_toBottomOf="@+id/name_of_city"
+        tools:text="31°C" />
 
-    <Button
-        android:layout_gravity="center|bottom"
-        android:layout_marginBottom="16dp"
+    <ImageView
+        android:id="@+id/current_condition_icon"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ic_launcher_foreground"
+        app:layout_constraintEnd_toEndOf="@+id/name_of_city"
+        app:layout_constraintStart_toEndOf="@+id/current_temp"
+        app:layout_constraintTop_toBottomOf="@+id/name_of_city" />
+
+    <TextView
+        android:id="@+id/current_temp_feels_like_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/feels_like_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/current_feels_like"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/current_temp"
+        app:layout_constraintStart_toStartOf="@+id/current_temp"
+        app:layout_constraintTop_toBottomOf="@+id/current_condition_icon" />
+
+    <TextView
+        android:id="@+id/current_temp_feels_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/current_feels_like"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/current_temp_feels_like_text"
+        app:layout_constraintStart_toStartOf="@+id/current_temp_feels_like_text"
+        app:layout_constraintTop_toBottomOf="@+id/current_temp_feels_like_text"
+        tools:text="Clear" />
+
+    <TextView
+        android:id="@+id/current_temp_min_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="@string/min_current_temp_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/current_feels_like"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/weather_image_bg"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/current_temp_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="@dimen/current_feels_like"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/current_temp_min_text"
+        app:layout_constraintStart_toEndOf="@id/current_temp_min_text"
+        app:layout_constraintTop_toTopOf="@+id/current_temp_min_text"
+        tools:text="24°C" />
+
+    <TextView
+        android:id="@+id/current_temp_max_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/max_current_temp_text"
+        android:textColor="@color/white"
+        android:textSize="@dimen/current_feels_like"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/weather_image_bg"
+        app:layout_constraintEnd_toStartOf="@id/current_temp_max" />
+
+    <TextView
+        android:id="@+id/current_temp_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/current_feels_like"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/current_temp_max_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/current_temp_max_text"
+        tools:text="36°C" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weather_week_forecast_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/sunny_base"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weather_image_bg"
+        tools:listitem="@layout/forecasted_week_item" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button"
-        android:text="Get Location"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/sunny_top"
+        android:src="@drawable/ic_search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/sunny_base"
+        tools:ignore="ContentDescription" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

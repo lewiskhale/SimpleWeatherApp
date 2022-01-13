@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="city_name">36sp</dimen>
+    <dimen name="current_weather_temp">28sp</dimen>
+    <dimen name="current_feels_like">16sp</dimen>
+    <dimen name="listed">12sp</dimen>
+</resources>

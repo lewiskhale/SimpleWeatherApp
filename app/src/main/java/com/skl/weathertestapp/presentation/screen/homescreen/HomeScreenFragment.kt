@@ -1,33 +1,35 @@
 package com.skl.weathertestapp.presentation.screen.homescreen
 
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import androidx.core.app.ActivityCompat
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.*
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-import com.google.android.gms.location.LocationRequest.PRIORITY_NO_POWER
-import com.google.android.gms.tasks.CancellationTokenSource
 import com.skl.weathertestapp.databinding.FragmentHomeScreenBinding
 import com.skl.weathertestapp.presentation.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
-import java.util.jar.Manifest
+import com.skl.weathertestapp.R
+import java.util.*
 
 class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
 
     override fun getViewBinding(): FragmentHomeScreenBinding = FragmentHomeScreenBinding.inflate(layoutInflater)
 
     private var requestingLocation: Boolean = false
+    private var nameOfCity: String = ""
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private val viewmodel:HomeScreenVM by sharedViewModel()
+    private val viewModel:HomeScreenVM by sharedViewModel()
 
     private val presenter: HomeScreenPresenter by sharedViewModel{
-        parametersOf(viewmodel)
+        parametersOf(viewModel)
     }
 
     private val locationCallback = object: LocationCallback(){
@@ -47,11 +49,21 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
     }
 
     private fun subscribeObservers(){
-        viewmodel.forecast.observe(viewLifecycleOwner) { forecast->
-            binding.currentTempText.text = forecast.current.current_temp.toString()
+        viewModel.forecast.observe(viewLifecycleOwner) { forecast->
+            binding.nameOfCity.text = nameOfCity
+            binding.currentTemp.text = resources.getString(R.string.temp_with_decimal, forecast.current.current_temp.toString())
+            binding.currentTempMin.text = resources.getString(R.string.temp_with_decimal, forecast.forecast.forecast_list.first().day_of_the_week_info.min.toString())
+            binding.currentTempMax.text = resources.getString(R.string.temp_with_decimal, forecast.forecast.forecast_list.first().day_of_the_week_info.max.toString())
+            binding.currentTempFeelsLike.text = forecast.current.condition.text //resources.getString(R.string.temp_with_decimal, forecast.forecast.forecast_list.first().day_of_the_week_info.max.toString())
+            val uri = Uri.parse(forecast.current.condition.img).buildUpon().scheme("https").build()
+            Log.d("TAG", "subscribeObservers: uri is: $uri")
+            Glide
+                .with(this)
+                .load(uri)
+                .into(binding.currentConditionIcon)
         }
 
-        viewmodel.permissionGranted.observe(viewLifecycleOwner){
+        viewModel.permissionGranted.observe(viewLifecycleOwner){
             requestingLocation = it
         }
     }
@@ -61,6 +73,14 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
         if(requestingLocation){
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location->
                 startLocationUpdates()
+                try {
+                    val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                    val addresses: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    nameOfCity = addresses.first().locality
+
+                }catch (e: Exception){
+                    throw Exception("There was an exception: $e")
+                }
                 presenter.getWeather(location.latitude, location.longitude)
             }
         }
