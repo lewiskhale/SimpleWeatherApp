@@ -8,7 +8,8 @@ class ConditionMapper: Mapper<Forecast.Condition, ConditionResponse> {
     override fun toDomain(dto: ConditionResponse): Forecast.Condition {
         return Forecast.Condition(
             text = dto.text.orEmpty(),
-            img = dto.img.orEmpty()
+            img = dto.img.orEmpty(),
+            code = dto.code ?: -1
         )
     }
 }

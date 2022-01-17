@@ -32,6 +32,7 @@ data class Forecast(
 
     data class Condition(
         val text: String,
-        val img: String
+        val img: String,
+        val code: Int
     )
 }

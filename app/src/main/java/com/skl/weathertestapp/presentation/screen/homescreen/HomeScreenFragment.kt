@@ -61,10 +61,28 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
                 .with(this)
                 .load(uri)
                 .into(binding.currentConditionIcon)
+            val weatherConditionCode = forecast.current.condition.code
+            updateBackground(weatherConditionCode)
         }
 
         viewModel.permissionGranted.observe(viewLifecycleOwner){
             requestingLocation = it
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun updateBackground(weatherConditionCode: Int) {
+        when (weatherConditionCode) {
+            1000 -> {
+                binding.weatherImageBg.setImageDrawable(resources.getDrawable(R.drawable.clear, null))
+                binding.weatherWeekForecastList.setBackgroundColor(resources.getColor(R.color.sunny_base, null))
+            }
+            in 1003..1009 -> {
+                binding.weatherImageBg.setImageDrawable(resources.getDrawable(R.drawable.forest_cloudy, null))
+                binding.weatherWeekForecastList.setBackgroundColor(resources.getColor(R.color.cloudy_base, null)) }
+            else -> {
+                binding.weatherImageBg.setImageDrawable(resources.getDrawable(R.drawable.forest_rainy, null))
+                binding.weatherWeekForecastList.setBackgroundColor(resources.getColor(R.color.rainy_base, null)) }
         }
     }
 
@@ -75,9 +93,11 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
                 startLocationUpdates()
                 try {
                     val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                    val addresses: List<Address> = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    val list = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                    val fakeAddress = Address(Locale.getDefault())
+                    fakeAddress.locality = "Cape Town"
+                    val addresses: List<Address> = if(list.isNotEmpty()) list else listOf(fakeAddress)
                     nameOfCity = addresses.first().locality
-
                 }catch (e: Exception){
                     throw Exception("There was an exception: $e")
                 }
@@ -94,9 +114,9 @@ class HomeScreenFragment : BaseFragment<FragmentHomeScreenBinding>() {
 
         Log.d("TAG", "startLocationUpdates: has started")
         val locationRequest = LocationRequest.create().apply {
-            setPriority(PRIORITY_HIGH_ACCURACY)
-            setInterval(2000)
-            setFastestInterval(1000)
+            priority = PRIORITY_HIGH_ACCURACY
+            interval = 2000
+            fastestInterval = 1000
         }
 
         fusedLocationProviderClient.requestLocationUpdates(

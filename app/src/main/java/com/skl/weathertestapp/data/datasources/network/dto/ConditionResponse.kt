@@ -6,5 +6,7 @@ data class ConditionResponse(
     @SerializedName("text")
     val text: String,
     @SerializedName("icon")
-    val img: String
+    val img: String,
+    @SerializedName("code")
+    val code: Int
 )

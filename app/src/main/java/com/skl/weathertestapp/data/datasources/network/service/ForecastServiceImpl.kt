@@ -18,10 +18,10 @@ class ForecastServiceImpl(
         return try {
             val forecast = mapper.toDomain(
                     client.get{
-                    url(ApiConstants.FORECAST_ENDPOINT)
-                    contentType(ContentType.Application.Json)
-                    parameter("key",ApiConstants.API_KEY)
-                    parameter("q", "$lat,$long")
+                        url(ApiConstants.FORECAST_ENDPOINT)
+                        contentType(ContentType.Application.Json)
+                        parameter("key",ApiConstants.API_KEY1)
+                        parameter("q", "$lat,$long")
                 }
             )
             Resource.Success(forecast)

@@ -11,9 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/forest_sunny"
+        android:src="@drawable/forest_rainy"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
@@ -42,7 +41,7 @@
         android:textSize="@dimen/current_weather_temp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/name_of_city"
-        app:layout_constraintStart_toStartOf="@+id/name_of_city"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_of_city"
         tools:text="31°C" />
 
@@ -50,8 +49,8 @@
         android:id="@+id/current_condition_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:layout_marginStart="8dp"
         android:src="@drawable/ic_launcher_foreground"
-        app:layout_constraintEnd_toEndOf="@+id/name_of_city"
         app:layout_constraintStart_toEndOf="@+id/current_temp"
         app:layout_constraintTop_toBottomOf="@+id/name_of_city" />
 
@@ -63,8 +62,8 @@
         android:textColor="@color/white"
         android:textSize="@dimen/current_feels_like"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="@+id/current_temp"
-        app:layout_constraintStart_toStartOf="@+id/current_temp"
+        app:layout_constraintEnd_toEndOf="@+id/name_of_city"
+        app:layout_constraintStart_toStartOf="@+id/name_of_city"
         app:layout_constraintTop_toBottomOf="@+id/current_condition_icon" />
 
     <TextView
@@ -132,7 +131,7 @@
         android:id="@+id/weather_week_forecast_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/sunny_base"
+        android:background="@color/rainy_base"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
